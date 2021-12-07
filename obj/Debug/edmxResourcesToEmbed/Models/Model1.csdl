@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="librarydbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="author">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="books" Relationship="librarydbModel.FK_book_author" FromRole="author" ToRole="book" />
+  </EntityType>
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="category_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="books" Relationship="librarydbModel.FK_book_category" FromRole="category" ToRole="book" />
+  </EntityType>
+  <EntityType Name="publisher">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="books" Relationship="librarydbModel.FK_book_publisher" FromRole="publisher" ToRole="book" />
+  </EntityType>
+  <EntityContainer Name="librarydbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="authors" EntityType="Self.author" />
+    <EntitySet Name="categories" EntityType="Self.category" />
+    <EntitySet Name="publishers" EntityType="Self.publisher" />
+    <EntitySet Name="members" EntityType="librarydbModel.member" />
+    <EntitySet Name="books" EntityType="librarydbModel.book" />
+    <AssociationSet Name="FK_book_author" Association="librarydbModel.FK_book_author">
+      <End Role="author" EntitySet="authors" />
+      <End Role="book" EntitySet="books" />
+    </AssociationSet>
+    <AssociationSet Name="FK_book_category" Association="librarydbModel.FK_book_category">
+      <End Role="category" EntitySet="categories" />
+      <End Role="book" EntitySet="books" />
+    </AssociationSet>
+    <AssociationSet Name="FK_book_publisher" Association="librarydbModel.FK_book_publisher">
+      <End Role="publisher" EntitySet="publishers" />
+      <End Role="book" EntitySet="books" />
+    </AssociationSet>
+    <EntitySet Name="returnbooks" EntityType="librarydbModel.returnbook" />
+    <EntitySet Name="issuebooks" EntityType="librarydbModel.issuebook" />
+  </EntityContainer>
+  <EntityType Name="member">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="phone" Type="Int32" />
+  </EntityType>
+  <EntityType Name="book">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="book_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="category_id" Type="Int32" />
+    <Property Name="author_id" Type="Int32" />
+    <Property Name="publisher_id" Type="Int32" />
+    <Property Name="contents" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="pages" Type="Int32" />
+    <Property Name="edition" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="author" Relationship="librarydbModel.FK_book_author" FromRole="book" ToRole="author" />
+    <NavigationProperty Name="category" Relationship="librarydbModel.FK_book_category" FromRole="book" ToRole="category" />
+    <NavigationProperty Name="publisher" Relationship="librarydbModel.FK_book_publisher" FromRole="book" ToRole="publisher" />
+  </EntityType>
+  <Association Name="FK_book_author">
+    <End Type="librarydbModel.author" Role="author" Multiplicity="0..1" />
+    <End Type="librarydbModel.book" Role="book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="author">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="book">
+        <PropertyRef Name="author_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_book_category">
+    <End Type="librarydbModel.category" Role="category" Multiplicity="0..1" />
+    <End Type="librarydbModel.book" Role="book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="book">
+        <PropertyRef Name="category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_book_publisher">
+    <End Type="librarydbModel.publisher" Role="publisher" Multiplicity="0..1" />
+    <End Type="librarydbModel.book" Role="book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="publisher">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="book">
+        <PropertyRef Name="publisher_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="returnbook">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="mid" Type="Int32" />
+    <Property Name="book" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="returndate" Type="DateTime" Precision="0" />
+    <Property Name="elap" Type="Int32" />
+    <Property Name="fine" Type="Int32" />
+  </EntityType>
+  <EntityType Name="issuebook">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="m_id" Type="Int32" />
+    <Property Name="book_id" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="issue_date" Type="DateTime" Precision="0" />
+    <Property Name="returndate" Type="DateTime" Precision="0" />
+  </EntityType>
+</Schema>
